@@ -1,7 +1,6 @@
 <script>
 	// import logo from '$lib/assets/place-logo.svg';
 	import PlaceLogo from '$lib/PlaceLogo.svelte';
-
 	let series = { title: 'Název série',
             date: '',
 			emoji: '🥬'}
@@ -43,12 +42,16 @@
 
     ]
 
+
 </script>
 
 <svelte:head>
 	<title>Place</title>
 	<meta name="description" content="Place Content Ediotor" />
 </svelte:head>
+
+
+
 
 <div class="h-screen flex">
 	<!-- Fixed sidebar -->

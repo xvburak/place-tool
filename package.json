@@ -24,6 +24,7 @@
 		"@lukeed/uuid": "^2.0.0",
 		"bufferutil": "^4.0.3",
 		"cookie": "^0.4.1",
+		"html2canvas": "^1.4.1",
 		"supports-color": "^9.0.2",
 		"utf-8-validate": "^5.0.5"
 	}
