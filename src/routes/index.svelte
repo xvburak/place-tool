@@ -1,9 +1,51 @@
 <script>
+	import domtoimage from 'dom-to-image';
+	import {
+		saveAs
+	} from 'file-saver';
+
+	function capture_post(number) {
+		domtoimage.toPng(document.getElementById(`my-node-${number}`), {
+				width: 1080,
+				height: 1080,
+				style: {
+					'transform': 'scale(2)',
+					'transform-origin': 'top left'
+				}
+			})
+			.then(function (dataUrl) {
+				var link = document.createElement('a');
+				link.download = 'post.png';
+				link.href = dataUrl;
+				link.click();
+			});
+	}
+
+	function capture_story(number) {
+		domtoimage.toPng(document.getElementById(`my-node-${number}s`), {
+				width: 1080,
+				height: 1920,
+				style: {
+					'transform': 'scale(3.56)',
+					'transform-origin': 'top left'
+				}
+			})
+			.then(function (dataUrl) {
+				var link = document.createElement('a');
+				link.download = 'story.png';
+				link.href = dataUrl;
+				link.click();
+			});
+	}
+
+
 	// import logo from '$lib/assets/place-logo.svg';
 	import PlaceLogo from '$lib/PlaceLogo.svelte';
-	let series = { title: 'Název série',
-            date: '',
-			emoji: '🥬'}
+	let series = {
+		title: 'Název série',
+		date: '',
+		emoji: '🥬'
+	}
 
 	let colors = {
 		primary: '#FAE0E4',
@@ -11,38 +53,36 @@
 	}
 
 	let actions = [{
-            title: 'Název události 1',
+			title: 'Název události 1',
 			type: 'live',
-            day:'0',
-			month:'0',
+			day: '0',
+			month: '0',
 			emoji: '🔮'
-        },
-        {
-            title: 'Název události 2',
-			type: 'live',
-            day:'0',
-			month:'0',
-			emoji: '🎧'
-        },
+		},
 		{
-            title: 'Název události 3',
+			title: 'Název události 2',
 			type: 'live',
-            day:'0',
-			month:'0',
+			day: '0',
+			month: '0',
+			emoji: '🎧'
+		},
+		{
+			title: 'Název události 3',
+			type: 'live',
+			day: '0',
+			month: '0',
 			emoji: '🗻'
-        },
-        {
-            title: 'Název události 4',
+		},
+		{
+			title: 'Název události 4',
 			type: 'live',
-            day:'0',
-			month:'0',
+			day: '0',
+			month: '0',
 			emoji: '🍤'
-        },
-		
-
-    ]
+		},
 
 
+	]
 </script>
 
 <svelte:head>
@@ -75,54 +115,55 @@
 					</div>
 				</div>
 			</div>
-			<div class="text-size w-1/2">
+			<!-- <div class="text-size w-1/2">
 				<h2>Velikost textu</h2>
-				
-						<div class="w-full">
-							<div class="grid grid-cols-3 gap-2 w-full">
 
-								<div class="inline-block radio">
-									<input name="answer" type="radio" id="small" hidden="hidden" value="small" />
-									<label for="small"
-										class="px-2 py-1 rounded-full flex justify-center items-center  w-full h-10">
-										Malá
-									</label>
-								</div>
-								<div class="inline-block radio">
-									<input name="answer" type="radio" id="medium" hidden="hidden" value="medium" />
-									<label for="medium"
-										class="px-2 py-1 rounded-full flex justify-center items-center w-full h-10">
-										Střední
-									</label>
-								</div>
-								<div class="inline-block radio">
-									<input name="answer" type="radio" id="big" hidden="hidden" value="big" />
-									<label for="big"
-										class="px-4 py-1 rounded-full flex justify-center items-center  w-full h-10">
-										Velká
-									</label>
-								</div>
-							</div>
+				<div class="w-full">
+					<div class="grid grid-cols-3 gap-2 w-full">
+
+						<div class="inline-block radio">
+							<input name="answer" type="radio" id="small" hidden="hidden" value="small" />
+							<label for="small"
+								class="px-2 py-1 rounded-full flex justify-center items-center  w-full h-10">
+								Malá
+							</label>
 						</div>
-			</div>
+						<div class="inline-block radio">
+							<input name="answer" type="radio" id="medium" hidden="hidden" value="medium" />
+							<label for="medium"
+								class="px-2 py-1 rounded-full flex justify-center items-center w-full h-10">
+								Střední
+							</label>
+						</div>
+						<div class="inline-block radio">
+							<input name="answer" type="radio" id="big" hidden="hidden" value="big" />
+							<label for="big"
+								class="px-4 py-1 rounded-full flex justify-center items-center  w-full h-10">
+								Velká
+							</label>
+						</div>
+					</div>
+				</div>
+			</div> -->
 		</div>
 
-			<div class="serie mb-4 border-b border-b-white pb-4">
-				<h2>Série</h2>
-				<div class="flex space-x-2 mb-2">
-					<input class="w-full p-4 h-10 rounded-full" type="text" bind:value={series.title} placeholder="Název události">
-					<!-- <div class="flex w-1/4 space-x-2">
+		<div class="serie mb-4 border-b border-b-white pb-4">
+			<h2>Série</h2>
+			<div class="flex space-x-2 mb-2">
+				<input class="w-full p-4 h-10 rounded-full" type="text" bind:value={series.title}
+					placeholder="Název události">
+				<!-- <div class="flex w-1/4 space-x-2">
 						<input class="w-full p-4 h-10 rounded-full" type="number" >
 						<input class="w-full p-4 h-10 rounded-full" type="number" >
 					</div> -->
-			
-					<input class="h-10 w-10 text-center rounded-full" type="text" bind:value={series.emoji}>
-				</div>
-				
+
+				<input class="h-10 w-10 text-center rounded-full" type="text" bind:value={series.emoji}>
 			</div>
-			<div class="events mb-4 border-b border-b-white pb-4">
-				<h2>Události</h2>
-				{#each actions as action}
+
+		</div>
+		<div class="events mb-4 border-b border-b-white pb-4">
+			<h2>Události</h2>
+			{#each actions as action}
 				<div class="flex space-x-2 mb-2">
 					<input class="w-5/12 p-4 h-10 rounded-full" bind:value={action.title} placeholder="Název události">
 					<input class="w-3/12 p-4 h-10 rounded-full" type="text" bind:value={action.type} placeholder="Typ události">
@@ -135,112 +176,129 @@
 				</div>
 				{/each} 
 			</div>
-
+		
 
 		<div class="info">
 			<h2>Info & kontakt</h2>
 				<div class="flex space-x-2 mb-2">
 					<textarea class="w-full p-4 rounded-[16px]" name="event-name" id="event-name" cols="40" rows="4">každý pátek v 18:00
-online na @placezlin
-Youtube → AC Zlín
-placezlin@gmail.com</textarea>
+	online na @placezlin
+	Youtube → AC Zlín
+	placezlin@gmail.com
+	</textarea>
 				</div>
-
-
 		</div>
 	</div>
 
-	<!-- Scroll wrapper -->
-	<!-- <div class="flex-1 flex overflow-clip w-full p-4">
-	
-		<div class="mx-auto space-x-8 w-full bg-green-100 flex p-8 snap-mandatory snap-x overflow-scroll"> -->
-			<!-- <div class="sticky top-0 bg-neutral-100 p-4">
-				<h3>Instagram Posts — Events</h3>
-			</div> -->
 
-			<!-- <div  class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
-				<p class="text-[38px] text-center">{series.emoji}</p>
-				<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
-				<div class="mx-auto uppercase">
-					{#each actions as action}
-						<div class="flex space-x-4 text-[18px]">
-							<div class="flex">
-								<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
-								<span> .</span>
-								<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
-								<span> .</span>
-							</div>
-							<div class="flex space-x-1">
-								<p class="">{action.title}</p>
-								<p class="superscript lowercase">{action.type}</p>
+
+	
+		<div class="flex-1 snap-mandatory snap-y flex flex-col overflow-scroll w-full">
+		
+				<!-- Instagram Post -->
+			<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+						
+					<div class="w-full flex justify-center">
+
+						<div id="my-node-x"  class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
+							<div class="">
+								<p class="text-[38px] text-center">{series.emoji}</p>
 							</div>
 							
-						</div>
-					{/each}
-				</div>
-				<div class="flex justify-center">
-					<PlaceLogo color={colors.secondary}/>
-				</div>
-			</div> -->
-		<div class="flex-1 flex overflow-clip w-full">
-				
-				<div class="mx-auto space-x-8 w-full flex p-4 snap-mandatory snap-x overflow-scroll">
-
-					<div class=" snap-center flex flex-col justify-center w-full flex-shrink-0">
-						
-						<div  class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
-							<p class="text-[38px] text-center">{series.emoji}</p>
-							<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
-							<div class="mx-auto uppercase">
-								{#each actions as action}
-									<div class="flex space-x-4 text-[18px]">
-										<div class="flex">
-											<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
-											<span> .</span>
-											<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
-											<span> .</span>
+							<div class="h-full flex flex-col justify-center space-y-6">
+								<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
+								<div class="mx-auto uppercase">
+									{#each actions as action}
+										<div class="flex space-x-4 text-[18px]">
+											<div class="flex">
+												<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
+												<span> .</span>
+												<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
+												<span> .</span>
+											</div>
+											<div class="flex space-x-1">
+												<p class="">{action.title}</p>
+												<p class="superscript lowercase">{action.type}</p>
+											</div>
+											
 										</div>
-										<div class="flex space-x-1">
-											<p class="">{action.title}</p>
-											<p class="superscript lowercase">{action.type}</p>
-										</div>
-										
-									</div>
-								{/each}
+									{/each}
+								</div>
 							</div>
 							<div class="flex justify-center">
 								<PlaceLogo color={colors.secondary}/>
 							</div>
 						</div>
+						</div>
 
-
-					</div>
-
-			{#each actions as action}
-				<div class=" snap-center flex flex-col justify-center w-full flex-shrink-0">
-					<div  class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
-						<p class="text-[38px] text-center">{action.emoji}</p>
-						<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
-						<div class="flex justify-center">
-							<PlaceLogo color={colors.secondary}/>
+						<div class="w-full flex justify-center">
+							<button on:click={() => capture_post("x")}>
+								Export
+							</button>
 						</div>
 					</div>
-				</div>
-			{/each}
 
-			<!-- {#each actions as action}
-				<div  class="instagram-story" style="background-color:{colors.primary}; color:{colors.secondary};">
-					<p class="text-[38px] text-center">{action.emoji}</p>
-					<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
-					<div class="flex justify-center">
-						<PlaceLogo color={colors.secondary}/>
+
+
+				{#each actions as action , index}
+					<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+						
+						<div class="flex w-full justify-center">
+
+	
+						<div id="my-node-{index}" class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
+							<div class="">
+								<p class="text-[38px] text-center">{action.emoji}</p>
+							</div>
+							<div class="h-full flex flex-col justify-center">
+								<p class="text-[64px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
+							</div>
+							<div class="flex justify-center">
+								<PlaceLogo color={colors.secondary}/>
+							</div>
+
+						</div>
 					</div>
-				</div>
-			{/each}
-			 -->
+						<div class="w-full flex justify-center">
+							<button on:click={() => capture_post(`${index}`)}>
+								Export
+							</button>
+						</div>
+					</div>
+				{/each}
+<!-- Instagram Story -->
 			
-		</div>
-	</div>
+				{#each actions as action , index}
+					<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+						
+						<div class="flex w-full justify-center">
+
+	
+						<div id="my-node-{index}s" class="instagram-story" style="background-color:{colors.primary}; color:{colors.secondary};">
+							<div class="">
+								<p class="text-[22px] text-center">{action.emoji}</p>
+							</div>
+							<div class="h-full flex flex-col justify-center">
+								<p class="text-[39px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
+							</div>
+							<div class="flex justify-center logomini">
+								<PlaceLogo color={colors.secondary}/>
+							</div>
+
+						</div>
+					</div>
+						<div class="w-full flex justify-center">
+							<button on:click={() => capture_story(`${index}`)}>
+								Export
+							</button>
+						</div>
+					</div>
+				{/each}
+			</div>
+
+
+		
+
 </div>
 
 <style>
@@ -251,11 +309,19 @@ placezlin@gmail.com</textarea>
 	.superscript { position: relative; font-size: 60%; top: 0.1em}
 
 	.instagram-post {
-		@apply font-suisse w-[540px] h-[540px] flex flex-col justify-between p-8 my-auto mx-auto;
+		width: 540px;
+		height: 540px;
+		@apply  font-suisse p-8 flex flex-col;
 	}
 
 	.instagram-story {
-		@apply font-suisse w-[540px] h-[960px] flex flex-col justify-between px-8 py-32 mb-8;
+		width: 303px;
+		height: 540px;
+		@apply  font-suisse px-8 py-12 flex flex-col;
+	}
+
+	.logomini {
+		zoom: 75%;
 	}
 
 	.facebook-cover {
@@ -295,5 +361,10 @@ placezlin@gmail.com</textarea>
 		border: none;
 		@apply rounded-full;
 	}
+
+	button {
+		@apply px-2 py-1 rounded-full flex justify-center items-center  w-1/4 h-10 bg-neutral-200 text-neutral-600 uppercase text-xs tracking-widest;
+	}
+
 
 </style>
