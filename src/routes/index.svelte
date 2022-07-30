@@ -1,8 +1,16 @@
 <script>
+	import {
+		marked
+	} from 'marked';
 	import domtoimage from 'dom-to-image';
 	import {
 		saveAs
 	} from 'file-saver';
+
+	function printDocument(documentId) {
+		var doc = document.getElementById(documentId);
+		print();
+	}
 
 	function capture_post(number) {
 		domtoimage.toPng(document.getElementById(`my-node-${number}`), {
@@ -15,7 +23,24 @@
 			})
 			.then(function (dataUrl) {
 				var link = document.createElement('a');
-				link.download = 'post.png';
+				link.download = `post-${number}.png`;
+				link.href = dataUrl;
+				link.click();
+			});
+	}
+
+	function capture_cover(number) {
+		domtoimage.toPng(document.getElementById(`my-node-${number}f`), {
+				width: 1640,
+				height: 624,
+				style: {
+					'transform': 'scale(3.08)',
+					'transform-origin': 'top left'
+				}
+			})
+			.then(function (dataUrl) {
+				var link = document.createElement('a');
+				link.download = `cover.png`;
 				link.href = dataUrl;
 				link.click();
 			});
@@ -32,7 +57,7 @@
 			})
 			.then(function (dataUrl) {
 				var link = document.createElement('a');
-				link.download = 'story.png';
+				link.download = `story-${number}.png`;
 				link.href = dataUrl;
 				link.click();
 			});
@@ -41,6 +66,13 @@
 
 	// import logo from '$lib/assets/place-logo.svg';
 	import PlaceLogo from '$lib/PlaceLogo.svelte';
+
+	let desc = `každý pátek v 18:00 <br>
+online na @placezlin <br>
+Youtube → AC Zlín <br> <br>
+placezlin@gmail.com
+`;
+
 	let series = {
 		title: 'Název série',
 		date: '',
@@ -53,32 +85,39 @@
 	}
 
 	let actions = [{
-			title: 'Název události 1',
+			title: 'Akce první týden',
 			type: 'live',
-			day: '0',
-			month: '0',
+			day: '1',
+			month: '1',
 			emoji: '🔮'
 		},
 		{
-			title: 'Název události 2',
+			title: 'Akce druhý týden',
 			type: 'live',
-			day: '0',
-			month: '0',
+			day: '8',
+			month: '1',
 			emoji: '🎧'
 		},
 		{
-			title: 'Název události 3',
+			title: 'Akce třetí týden',
 			type: 'live',
-			day: '0',
-			month: '0',
+			day: '15',
+			month: '1',
 			emoji: '🗻'
 		},
 		{
-			title: 'Název události 4',
+			title: 'Akce čtvrtý týden',
 			type: 'live',
-			day: '0',
-			month: '0',
+			day: '21',
+			month: '1',
 			emoji: '🍤'
+		},
+		{
+			title: 'Akce pátý týden',
+			type: 'live',
+			day: '28',
+			month: '1',
+			emoji: '🏳️‍🌈'
 		},
 
 
@@ -95,7 +134,7 @@
 
 <div class="h-screen flex">
 	<!-- Fixed sidebar -->
-	<div class="bg-neutral-200 w-2/5 overflow-hidden p-4">
+	<div class="bg-neutral-200 w-2/5 overflow-hidden p-4 print:hidden">
 		<!-- Sidebar content -->
 
 		<div class="visuals flex mb-4 border-b border-b-white pb-4">
@@ -181,20 +220,75 @@
 		<div class="info">
 			<h2>Info & kontakt</h2>
 				<div class="flex space-x-2 mb-2">
-					<textarea class="w-full p-4 rounded-[16px]" name="event-name" id="event-name" cols="40" rows="4">každý pátek v 18:00
-	online na @placezlin
-	Youtube → AC Zlín
-	placezlin@gmail.com
-	</textarea>
+					<textarea bind:value={desc} class="w-full p-4 rounded-[16px]"  cols="40" rows="4"></textarea>
 				</div>
 		</div>
 	</div>
 
-
-
-	
 		<div class="flex-1 snap-mandatory snap-y flex flex-col overflow-scroll w-full">
-		
+
+			<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+
+				<div class="w-full flex justify-center">
+
+					<div id="a3"  class="a3 font-suisse print:p-16 p-4 flex flex-col w-[382.08px] h-[540px] print:w-[297mm] print:h-[420mm]" style="background-color:{colors.primary}; color:{colors.secondary};">
+						
+						
+						<div class="h-full flex flex-col justify-between">
+
+							<div class="flex justify-between">
+								<div class="flex justify-center logomini">
+									<PlaceLogo color={colors.secondary}/>
+								</div>
+								<p class="text-[28px] print:text-[70px] leading-none text-center">{series.emoji}</p>
+							</div>
+
+
+							<p class="text-[52px] print:text-[136px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
+
+
+							<div class="flex justify-between text-[9px] print:text-[28px]">
+								<div class="w-full uppercase">
+									{#each actions as action}
+										{#if action.title}
+											<div class="flex space-x-4">
+												<div class="flex">
+													<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
+													<span> .</span>
+													<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
+													<span> .</span>
+												</div>
+												<div class="flex space-x-1">
+													<p class="">{action.title}</p>
+													<p class="superscript lowercase">{action.type}</p>
+												</div>
+											</div>
+										{/if}
+									{/each}
+								</div>
+								<div class="text-right">
+									{@html marked(desc)}
+								</div>
+							</div>
+
+
+
+						</div>
+					</div>
+					</div>
+
+					<div class="w-full print:hidden flex justify-center">
+						<button on:click={() => printDocument("a3")}>
+							Export
+						</button>
+					</div>
+				</div>
+
+
+
+
+
+
 				<!-- Instagram Post -->
 			<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
 						
@@ -208,20 +302,23 @@
 							<div class="h-full flex flex-col justify-center space-y-6">
 								<p class="text-[68px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
 								<div class="mx-auto uppercase">
+									
 									{#each actions as action}
-										<div class="flex space-x-4 text-[18px]">
-											<div class="flex">
-												<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
-												<span> .</span>
-												<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
-												<span> .</span>
+										{#if action.title}
+											<div class="flex space-x-4 text-[18px]">
+												<div class="flex">
+													<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
+													<span> .</span>
+													<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
+													<span> .</span>
+												</div>
+												<div class="flex space-x-1">
+													<p class="">{action.title}</p>
+													<p class="superscript lowercase">{action.type}</p>
+												</div>
 											</div>
-											<div class="flex space-x-1">
-												<p class="">{action.title}</p>
-												<p class="superscript lowercase">{action.type}</p>
-											</div>
-											
-										</div>
+										{/if}
+										
 									{/each}
 								</div>
 							</div>
@@ -237,62 +334,153 @@
 							</button>
 						</div>
 					</div>
+				<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
 
+					<div class="w-full flex justify-center">
 
-
-				{#each actions as action , index}
-					<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
-						
-						<div class="flex w-full justify-center">
-
-	
-						<div id="my-node-{index}" class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
+						<div id="my-node-xs"  class="instagram-story" style="background-color:{colors.primary}; color:{colors.secondary};">
 							<div class="">
-								<p class="text-[38px] text-center">{action.emoji}</p>
+								<p class="text-[26px] text-center">{series.emoji}</p>
 							</div>
-							<div class="h-full flex flex-col justify-center">
-								<p class="text-[64px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
-							</div>
-							<div class="flex justify-center">
-								<PlaceLogo color={colors.secondary}/>
-							</div>
-
-						</div>
-					</div>
-						<div class="w-full flex justify-center">
-							<button on:click={() => capture_post(`${index}`)}>
-								Export
-							</button>
-						</div>
-					</div>
-				{/each}
-<!-- Instagram Story -->
-			
-				{#each actions as action , index}
-					<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
-						
-						<div class="flex w-full justify-center">
-
-	
-						<div id="my-node-{index}s" class="instagram-story" style="background-color:{colors.primary}; color:{colors.secondary};">
-							<div class="">
-								<p class="text-[22px] text-center">{action.emoji}</p>
-							</div>
-							<div class="h-full flex flex-col justify-center">
-								<p class="text-[39px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
+							
+							<div class="h-full flex flex-col justify-center space-y-6">
+								<p class="text-[39px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
+								<div class="mx-auto uppercase">
+									{#each actions as action}
+										{#if action.title}
+											<div class="flex space-x-4 text-[12px]">
+												<div class="flex">
+													<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
+													<span> .</span>
+													<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
+													<span> .</span>
+												</div>
+												<div class="flex space-x-1">
+													<p class="">{action.title}</p>
+													<p class="superscript lowercase">{action.type}</p>
+												</div>
+											</div>
+										{/if}
+										
+									{/each}
+								</div>
 							</div>
 							<div class="flex justify-center logomini">
 								<PlaceLogo color={colors.secondary}/>
 							</div>
-
 						</div>
-					</div>
+						</div>
+
 						<div class="w-full flex justify-center">
-							<button on:click={() => capture_story(`${index}`)}>
+							<button on:click={() => capture_story("x")}>
 								Export
 							</button>
 						</div>
 					</div>
+				
+					<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+
+						<div class="w-full flex justify-center">
+	
+							<div id="my-node-xf"  class="facebook-cover" style="background-color:{colors.primary}; color:{colors.secondary};">
+								
+								
+								<div class="h-full flex flex-col justify-evenly">
+									<div class="">
+										<p class="text-[22px] leading-none text-center">{series.emoji}</p>
+									</div>
+									<p class="text-[30px] tracking-normal leading-[1] uppercase text-center">{series.title}</p>
+									<div class="mx-auto uppercase">
+										{#each actions as action}
+											{#if action.title}
+												<div class="flex space-x-4 text-[9px]">
+													<div class="flex">
+														<p class="tabular-nums lining-nums"> {('0' + action.day).slice(-2)}</p>
+														<span> .</span>
+														<p class="tabular-nums lining-nums">{('0' + action.month).slice(-2)}</p>
+														<span> .</span>
+													</div>
+													<div class="flex space-x-1">
+														<p class="">{action.title}</p>
+														<p class="superscript lowercase">{action.type}</p>
+													</div>
+												</div>
+											{/if}
+											
+										{/each}
+									</div>
+								</div>
+							</div>
+							</div>
+	
+							<div class="w-full flex justify-center">
+								<button on:click={() => capture_cover("x")}>
+									Export
+								</button>
+							</div>
+						</div>
+	
+
+
+				{#each actions as action , index}
+				{#if action.title}
+				<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+						
+					<div class="flex w-full justify-center">
+
+
+					<div id="my-node-{index}" class="instagram-post" style="background-color:{colors.primary}; color:{colors.secondary};">
+						<div class="">
+							<p class="text-[38px] text-center">{action.emoji}</p>
+						</div>
+						<div class="h-full flex flex-col justify-center">
+							<p class="text-[64px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
+						</div>
+						<div class="flex justify-center">
+							<PlaceLogo color={colors.secondary}/>
+						</div>
+
+					</div>
+				</div>
+					<div class="w-full flex justify-center">
+						<button on:click={() => capture_post(`${index}`)}>
+							Export
+						</button>
+					</div>
+				</div>
+				{/if}
+					
+				{/each}
+<!-- Instagram Story -->
+			
+				{#each actions as action , index}
+				{#if action.title}
+				<div class="snap-center flex flex-col justify-evenly w-full h-full flex-shrink-0 p-4">
+						
+					<div class="flex w-full justify-center">
+
+
+					<div id="my-node-{index}s" class="instagram-story" style="background-color:{colors.primary}; color:{colors.secondary};">
+						<div class="">
+							<p class="text-[26px] text-center">{action.emoji}</p>
+						</div>
+						<div class="h-full flex flex-col justify-center">
+							<p class="text-[39px] tracking-normal leading-[1] uppercase text-center">{action.title}</p>
+						</div>
+						<div class="flex justify-center logomini">
+							<PlaceLogo color={colors.secondary}/>
+						</div>
+
+					</div>
+				</div>
+					<div class="w-full flex justify-center">
+						<button on:click={() => capture_story(`${index}`)}>
+							Export
+						</button>
+					</div>
+				</div>
+				{/if}
+					
 				{/each}
 			</div>
 
@@ -317,11 +505,39 @@
 	.instagram-story {
 		width: 303px;
 		height: 540px;
-		@apply  font-suisse px-8 py-12 flex flex-col;
+		@apply  font-suisse px-8 py-16 flex flex-col;
+	}
+
+	/* .a3 {
+		width: 382.08px;
+		height: 540px;
+		@apply font-suisse p-4 flex flex-col;
+	} */
+
+
+
+	.facebook-cover {
+		width: 540px;
+		height: 205.46px;
+		@apply  font-suisse px-20 flex flex-col;
 	}
 
 	.logomini {
 		zoom: 75%;
+	}
+
+	@media print {
+		.logomini {
+		zoom: 200%;
+	}
+}
+
+	.logomaxi {
+		zoom: 125%;
+	}
+
+	.logominimini {
+		zoom: 50%;
 	}
 
 	.facebook-cover {
